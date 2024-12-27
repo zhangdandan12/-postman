@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "ccb7c60c-dc80-4d60-91f1-090979dd1481",
+		"name": "企云宝",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8486797"
+	},
+	"item": [
+		{
+			"name": "登录企云宝",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"mobile\":\"13883097492\",\"password\":\"123456\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qyb.beta.wxb.com/api/user/signin",
+					"protocol": "https",
+					"host": [
+						"qyb",
+						"beta",
+						"wxb",
+						"com"
+					],
+					"path": [
+						"api",
+						"user",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "添加标签分组",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"group_name\": \"接口测试哈哈\",\r\n    \"tag_name\": \"接口\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qyb.beta.wxb.com/api/room/createGroup",
+					"protocol": "https",
+					"host": [
+						"qyb",
+						"beta",
+						"wxb",
+						"com"
+					],
+					"path": [
+						"api",
+						"room",
+						"createGroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查询标签组的标签（接口依赖获取第一个ID）",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Fixed accessing the correct properties\r",
+							"var jsonData = pm.response.json();  \r",
+							"var id = jsonData.data[0].id;\r",
+							"var tag_id =jsonData.data[0].tags[0].id\r",
+							"pm.environment.set(\"group_id\",id)\r",
+							"pm.environment.set(\"tag_id\",tag_id)\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://qyb.beta.wxb.com/api/room/tagList",
+					"protocol": "https",
+					"host": [
+						"qyb",
+						"beta",
+						"wxb",
+						"com"
+					],
+					"path": [
+						"api",
+						"room",
+						"tagList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "添加标签（设置参数随机值）",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var randomInt = Math.floor(Math.random() * 10000) + 1; // 生成1到10000之间的随机整数\r",
+							"var randomIntString = randomInt.toString(); // 转换为字符串\r",
+							"pm.environment.set('tag_name', randomIntString); // 设置为环境变量"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"group_id\": \"{{group_id}}\",\r\n    \"tag_name\": \"{{tag_name}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qyb.beta.wxb.com/api/room/tagSave",
+					"protocol": "https",
+					"host": [
+						"qyb",
+						"beta",
+						"wxb",
+						"com"
+					],
+					"path": [
+						"api",
+						"room",
+						"tagSave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查询标签组的标签（接口依赖获取第一个ID）",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json()  \r",
+							"var id = jsonData.data[0].id\r",
+							"var tag_id =jsonData.data[0].tags[0].id\r",
+							"pm.environment.set(\"group_id\",id)\r",
+							"pm.environment.set(\"tag_id\",tag_id)\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://qyb.beta.wxb.com/api/room/tagList",
+					"protocol": "https",
+					"host": [
+						"qyb",
+						"beta",
+						"wxb",
+						"com"
+					],
+					"path": [
+						"api",
+						"room",
+						"tagList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "修改标签",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tag_id\": \"{{tag_id}}\",\r\n    \"tag_name\": \"55修改后的5\",\r\n    \"group_id\": \"{{group_id}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qyb.beta.wxb.com/api/room/tagSave",
+					"protocol": "https",
+					"host": [
+						"qyb",
+						"beta",
+						"wxb",
+						"com"
+					],
+					"path": [
+						"api",
+						"room",
+						"tagSave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查询标签组的标签（接口依赖获取第一个ID）",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json()  \r",
+							"var id = jsonData.data[0].id\r",
+							"var tag_id =jsonData.data[0].tags[0].id\r",
+							"pm.environment.set(\"group_id\",id)\r",
+							"pm.environment.set(\"tag_id\",tag_id)\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://qyb.beta.wxb.com/api/room/tagList",
+					"protocol": "https",
+					"host": [
+						"qyb",
+						"beta",
+						"wxb",
+						"com"
+					],
+					"path": [
+						"api",
+						"room",
+						"tagList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "删除标签组",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":\"{{group_id}}\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qyb.beta.wxb.com/api/room/deleteTag",
+					"protocol": "https",
+					"host": [
+						"qyb",
+						"beta",
+						"wxb",
+						"com"
+					],
+					"path": [
+						"api",
+						"room",
+						"deleteTag"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
